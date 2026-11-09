@@ -60,7 +60,6 @@ code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
 nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 nav.top .wrap { display: flex; gap: 16px; align-items: center; padding-block: 10px; overflow-x: auto; scrollbar-width: none; }
 nav.top .brand { font-family: var(--font-display); font-weight: 900; white-space: nowrap; color: var(--fg); text-decoration: none; }
-nav.top .brand span { color: var(--pop); }
 nav.top ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 nav.top li a { display: block; padding: 4px 10px; border-radius: 999px; color: var(--muted); text-decoration: none; font-size: var(--step--1); white-space: nowrap; }
 nav.top li a:hover { background: var(--sunk); color: var(--fg); }
@@ -72,7 +71,9 @@ section > .wrap { display: grid; gap: 24px; }
 /* Portada */
 .hero { padding-block: 48px 56px; }
 .hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 32px; align-items: center; }
-.kanji { font-family: var(--font-display); font-weight: 900; font-size: clamp(4.5rem, 14vw, 8rem); line-height: 0.9; color: var(--pop); }
+.kanji { font-family: var(--font-display); font-weight: 900; font-size: clamp(4.5rem, 14vw, 8rem); line-height: 0.9; }
+.toki { color: var(--fg); }
+.moki { color: var(--pop); }
 .hero h1 { font-size: var(--step-4); font-weight: 900; margin-top: 8px; }
 .hero .meaning { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); margin-top: 6px; }
 .hero .pitch { font-size: var(--step-1); margin-top: 18px; }
@@ -161,7 +162,7 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: var(--step--1
 
 <nav class="top" aria-label="Secciones">
   <div class="wrap">
-    <a class="brand" href="#inicio">Toki <span>Moki</span></a>
+    <a class="brand" href="#inicio"><span class="toki">Toki</span> <span class="moki">Moki</span></a>
     <ul>
       <li><a href="#vision">Visión</a></li>
       <li><a href="#joya">La joya</a></li>
@@ -177,9 +178,9 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: var(--step--1
 <header class="hero" id="inicio">
   <div class="wrap">
     <div>
-      <div class="kanji" aria-hidden="true">時モキ</div>
-      <h1>Toki Moki</h1>
-      <div class="meaning">toki = tiempo, momento · moki = las criaturas de la Red</div>
+      <div class="kanji" aria-hidden="true"><span class="toki">時</span><span class="moki">モキ</span></div>
+      <h1><span class="toki">Toki</span> <span class="moki">Moki</span></h1>
+      <div class="meaning"><span class="toki">toki</span> = tiempo, momento · <span class="moki">moki</span> = las criaturas de la Red</div>
       <p class="pitch">Cría a un Moki con IA que te recuerda, decora tu Nido isométrico y llévalo a un mundo social vivo.</p>
       <div class="status">
         <span class="pill">Pre-producción · 0 líneas de código del juego</span>
@@ -450,7 +451,7 @@ gantt
 
 
 <footer>
-  <div class="wrap">Toki Moki · documentación de pre-producción v0.1 · 2026-11-08. Nombre sujeto a búsqueda de marcas.</div>
+  <div class="wrap"><span class="toki">Toki</span> <span class="moki">Moki</span> · documentación de pre-producción v0.1 · 2026-11-08. Nombre sujeto a búsqueda de marcas.</div>
 </footer>
 
 <script>
