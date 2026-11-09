@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Toki Moki: resumen visual de la pre-producción de un juego móvil de mascota digital con IA, Nido isométrico y mundo social.">
+<title>Toki Moki</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }
+/* Layout: expediente de pre-producción en una columna, con un "diorama" isométrico real como portada y navegación fija tipo Enlace. */
+:root {
+  --bg: #F4F3FA;
+  --surface: #FFFFFF;
+  --sunk: #ECEAF6;
+  --fg: #1E2140;
+  --muted: #5B5E80;
+  --line: #D8D6E9;
+  --accent: #0E8FA3;
+  --accent-soft: #D3F3F7;
+  --pop: #C4319F;
+  --pop-soft: #F8DDF1;
+  --ok: #1C8A5A; --ok-soft: #D8F2E5;
+  --warn: #A86A00; --warn-soft: #FBEBC8;
+  --part: #4E5BD0; --part-soft: #E1E4FB;
+  --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step--1: 0.84rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.6rem; --step-3: 2.2rem; --step-4: 3.4rem;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14162B; --surface: #1D2040; --sunk: #191B36; --fg: #ECEBFA; --muted: #A6A8CC; --line: #33365E;
+  --accent: #3EE6F7; --accent-soft: #123B4A; --pop: #FF6EDD; --pop-soft: #43204A;
+  --ok: #5FD99E; --ok-soft: #173A2D; --warn: #F4C15A; --warn-soft: #3D3016; --part: #9CA6FF; --part-soft: #262C5C;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #14162B; --surface: #1D2040; --sunk: #191B36; --fg: #ECEBFA; --muted: #A6A8CC; --line: #33365E;
+  --accent: #3EE6F7; --accent-soft: #123B4A; --pop: #FF6EDD; --pop-soft: #43204A;
+  --ok: #5FD99E; --ok-soft: #173A2D; --warn: #F4C15A; --warn-soft: #3D3016; --part: #9CA6FF; --part-soft: #262C5C;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: var(--step-0); line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--pop); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h2 { font-size: var(--step-3); font-weight: 900; }
+h3 { font-size: var(--step-1); font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+
+/* Navegación */
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+nav.top .wrap { display: flex; gap: 16px; align-items: center; padding-block: 10px; overflow-x: auto; scrollbar-width: none; }
+nav.top .brand { font-family: var(--font-display); font-weight: 900; white-space: nowrap; color: var(--fg); text-decoration: none; }
+nav.top .brand span { color: var(--pop); }
+nav.top ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+nav.top li a { display: block; padding: 4px 10px; border-radius: 999px; color: var(--muted); text-decoration: none; font-size: var(--step--1); white-space: nowrap; }
+nav.top li a:hover { background: var(--sunk); color: var(--fg); }
+
+section { padding-block: 56px; border-bottom: 1px solid var(--line); }
+section > .wrap { display: grid; gap: 24px; }
+.lede { color: var(--muted); font-size: var(--step-1); max-width: 60ch; }
+
+/* Portada */
+.hero { padding-block: 48px 56px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 32px; align-items: center; }
+.kanji { font-family: var(--font-display); font-weight: 900; font-size: clamp(4.5rem, 14vw, 8rem); line-height: 0.9; color: var(--pop); }
+.hero h1 { font-size: var(--step-4); font-weight: 900; margin-top: 8px; }
+.hero .meaning { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); margin-top: 6px; }
+.hero .pitch { font-size: var(--step-1); margin-top: 18px; }
+.status { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: var(--step--1); font-weight: 500; background: var(--sunk); color: var(--fg); white-space: nowrap; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.part { background: var(--part-soft); color: var(--part); }
+.diorama { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.diorama canvas { width: 100%; height: auto; display: block; }
+.diorama .cap { font-size: var(--step--1); color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.legend button { font: inherit; font-size: var(--step--1); border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 2px 10px 2px 6px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.legend button:hover, .legend button[aria-pressed="true"] { border-color: var(--accent); }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* Joya */
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.hex { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.75; overflow-x: auto; white-space: nowrap; background: var(--sunk); border-radius: 10px; padding: 12px 14px; }
+.hex .row { display: block; }
+.hex .off { color: var(--muted); margin-right: 10px; }
+.hex b { font-weight: 400; padding: 1px 2px; border-radius: 3px; transition: background .15s; }
+.hex b.hl { background: var(--accent); color: var(--bg); }
+.secs { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.secs button { font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 8px; padding: 3px 8px; cursor: pointer; }
+.secs button:hover, .secs button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.bars { display: grid; gap: 14px; }
+.bar-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 12px; align-items: center; }
+.bar-row .name { font-size: var(--step--1); }
+.bar-row .name small { display: block; color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+.stack { display: grid; gap: 3px; }
+.bar { height: 12px; border-radius: 4px; position: relative; min-width: 3px; }
+.bar.json { background: var(--line); }
+.bar.gz { background: var(--part); opacity: .55; }
+.bar.nmap { background: var(--pop); }
+.bar-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--step--1); color: var(--muted); }
+.bar-key i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; }
+.vals { font-family: var(--font-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Tablas y listas */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); background: var(--sunk); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-mono); white-space: nowrap; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; counter-reset: r; }
+.rules li { counter-increment: r; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 12px 44px; position: relative; font-size: var(--step--1); }
+.rules li::before { content: counter(r); position: absolute; left: 14px; top: 11px; font-family: var(--font-display); font-weight: 900; color: var(--pop); font-size: 1.1rem; }
+
+/* Diagramas */
+.diagrams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 10px; min-width: 0; }
+.diagram.wide { grid-column: 1 / -1; }
+.diagram pre.mermaid { margin: 0; overflow-x: auto; background: transparent; text-align: center; }
+.diagram p { font-size: var(--step--1); color: var(--muted); }
+
+/* Números */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 4px; align-content: start; }
+.tile .big { font-family: var(--font-display); font-weight: 900; font-size: var(--step-3); line-height: 1; font-variant-numeric: tabular-nums; }
+.tile .big small { font-size: var(--step-1); }
+.tile .lbl { font-size: var(--step--1); color: var(--muted); }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+
+/* Documentos */
+.docs { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.docgroup { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.docgroup h3 { font-size: var(--step-0); }
+.docgroup h3 .mono { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 6px; }
+.docgroup ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: var(--step--1); }
+.docgroup a { overflow-wrap: anywhere; }
+footer { padding-block: 32px 48px; color: var(--muted); font-size: var(--step--1); }
+
+@media (max-width: 820px) {
+  .hero .wrap, .two, .diagrams { grid-template-columns: minmax(0, 1fr); }
+  .diagram.wide { grid-column: auto; }
+  .bar-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Secciones">
+  <div class="wrap">
+    <a class="brand" href="#inicio">Toki <span>Moki</span></a>
+    <ul>
+      <li><a href="#vision">Visión</a></li>
+      <li><a href="#joya">La joya</a></li>
+      <li><a href="#decisiones">Decisiones</a></li>
+      <li><a href="#flujos">Flujos</a></li>
+      <li><a href="#numeros">Números</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#pendiente">Pendiente</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="kanji" aria-hidden="true">時</div>
+      <h1>Toki Moki</h1>
+      <div class="meaning">toki = tiempo, momento · moki = las criaturas de la Red</div>
+      <p class="pitch">Cría a un Moki con IA que te recuerda, decora tu Nido isométrico y llévalo a un mundo social vivo.</p>
+      <div class="status">
+        <span class="pill">Pre-producción · 0 líneas de código del juego</span>
+        <span class="pill ok">10 decisiones aceptadas</span>
+        <span class="pill part">1 aceptada en parte</span>
+        <span class="pill warn">4 propuestas</span>
+      </div>
+    </div>
+    <figure class="diorama" style="margin:0">
+      <canvas id="nido" width="560" height="420" role="img" aria-label="El Nido de ejemplo de 6 por 6 celdas dibujado en isométrico a partir de su RoomDoc: piso de madera, alfombra y tatami, una plataforma elevada, muros en los bordes traseros, una puerta, una ventana, un póster y siete muebles."></canvas>
+      <figcaption class="cap">El Nido de ejemplo dibujado en vivo desde su RoomDoc real: 36 celdas, 7 muebles y 2 objetos de pared. Toca un mueble de la lista para resaltarlo.</figcaption>
+      <ul class="legend" id="legend"></ul>
+    </figure>
+  </div>
+</header>
+
+<section id="vision">
+  <div class="wrap">
+    <div class="eyebrow">Visión</div>
+    <h2>Tres fantasías en un solo juego</h2>
+    <p class="lede">Eres el Operador. Tu Moki es tu presencia en el mundo: vive en tu Nido, visita los de tus amigos, pasea por Zonas oficiales, trabaja, corre circuitos de obstáculos y, con el tiempo, aprende a hablar contigo. Nunca muere: el descuido causa Corrupción, que se cura.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Fantasía</th><th>Lo que vive el jugador</th><th>Documento</th></tr></thead>
+        <tbody>
+          <tr><td>Cuidado y vínculo</td><td>Necesidades, ánimo, memoria de la IA, Diario; el Moki balbucea de bebé y conversa de adulto</td><td>Cuidado · Cerebro e IA</td></tr>
+          <tr><td>Expresión y hogar</td><td>Nido de 6×6 a 12×12 celdas, muebles que además cuidan y entrenan, visitas y reuniones</td><td>Nidos · Zonas</td></tr>
+          <tr><td>Crianza y competencia</td><td>Evolución ramificada o Consolidar la forma, Circuitos con ligas, Arena en el lanzamiento</td><td>Progresión · Circuitos</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Reglas de oro</h3>
+    <ol class="rules">
+      <li>El dinero compra expresión y comodidad, nunca poder competitivo.</li>
+      <li>Sin loot boxes pagadas: nada aleatorio se compra con dinero real.</li>
+      <li>El Moki nunca muere; el descuido causa Corrupción curable.</li>
+      <li>La IA nunca pide compras, nunca culpa, nunca finge ser humana.</li>
+      <li>El servidor manda en economía, inventario, muebles y resultados.</li>
+      <li>El LLM nunca se llama desde el cliente: siempre por el gateway.</li>
+      <li>Sin salas creadas por usuarios en las primeras fases.</li>
+      <li>Costos primero: cada sistema documenta su costo por DAU.</li>
+      <li>Originalidad de IP: nada reconocible de las inspiraciones.</li>
+      <li>Ética de retención: sin patrones oscuros, culpa ni escasez falsa.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="joya">
+  <div class="wrap">
+    <div class="eyebrow">La joya · formato de mundos</div>
+    <h2>Una sala entera cabe en 169 bytes</h2>
+    <p class="lede">Ninguna sala se descarga como modelo. Cada una es un documento de datos (RoomDoc en JSON) que viaja como binario NMAP; el cliente lo "compila" a sprites 2D con un catálogo de piezas que ya tiene. Desde el cambio a 2D, el formato no movió un solo byte.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>El Nido de arriba, byte por byte</h3>
+        <p style="font-size:var(--step--1);color:var(--muted)">Vector dorado oficial: 169 B, CRC32 <code>0x5C8BC4DF</code>. Toca una sección para ver sus bytes.</p>
+        <ul class="secs" id="secs"></ul>
+        <div class="hex" id="hex" aria-label="Volcado hexadecimal del NMAP de 169 bytes"></div>
+      </div>
+      <div class="panel">
+        <h3>Tamaño por sala (medido)</h3>
+        <div class="bar-key"><span><i style="background:var(--line)"></i>JSON</span><span><i style="background:var(--part);opacity:.55"></i>JSON + gzip</span><span><i style="background:var(--pop)"></i>NMAP</span></div>
+        <div class="bars" id="bars"></div>
+        <p style="font-size:var(--step--1);color:var(--muted)">Barras a escala respecto al JSON de cada sala. Salas sintéticas decoradas; una Plaza de 32×32 viaja en ~3.2 KB y cada cambio de decoración en 2–8 B.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="decisiones">
+  <div class="wrap">
+    <div class="eyebrow">Decisiones · ADRs</div>
+    <h2>Lo que ya quedó decidido</h2>
+    <p class="lede">Cada decisión importante tiene su registro (ADR) con contexto, alternativas y cómo revertirla. Las propuestas son recomendaciones que esperan tu confirmación.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>ADR</th><th>Decisión</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0001</td><td>Unity 6 como motor (con el renderizador 2D)</td><td><span class="pill warn">Propuesta</span></td></tr>
+          <tr><td class="num">0002</td><td>Backend: Supabase + Colyseus + Cloudflare R2 (Colyseus confirmado frente a Photon Fusion 2)</td><td><span class="pill part">En parte</span></td></tr>
+          <tr><td class="num">0003</td><td>Mundos como datos: RoomDoc + NMAP</td><td><span class="pill warn">Propuesta</span></td></tr>
+          <tr><td class="num">0004</td><td>IA con Claude Haiku 5.5 tras un gateway propio, con etapas de habla</td><td><span class="pill warn">Propuesta</span></td></tr>
+          <tr><td class="num">0005</td><td>El Moki es tu presencia; sin avatar humano</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0006</td><td>Sin aleatoriedad pagada ni pay-to-win</td><td><span class="pill warn">Propuesta</span></td></tr>
+          <tr><td class="num">0007</td><td>Público 13+ (núcleo 16–34)</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0008</td><td>Mercado global en inglés; español desde el lanzamiento</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0009</td><td>Pantalla vertical</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0010</td><td>Equipo de una persona: plazos ×2–2.5 y MVP recortado</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0011</td><td>Sin presupuesto: arte propio, solo 18+ hasta pagar moderación</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0012</td><td>Título "Toki Moki"; las criaturas son los Mokis</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0013</td><td>Confirmaciones de prioridad media (Arena después, cámara fija, voz, topes…)</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0014</td><td>Centro de Intercambio libre en Chips, con custodia</td><td><span class="pill ok">Aceptada</span></td></tr>
+          <tr><td class="num">0015</td><td>Arte 2D isométrico ilustrado, cámara fija</td><td><span class="pill ok">Aceptada</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="flujos">
+  <div class="wrap">
+    <div class="eyebrow">Flujos</div>
+    <h2>Cómo se mueve todo</h2>
+    <div class="diagrams">
+      <div class="diagram wide">
+        <h3>Arquitectura</h3>
+        <pre class="mermaid">
+flowchart LR
+  C["Cliente Unity 2D"] -- "salas: WebSocket" --> CO["Colyseus: Nidos, Zonas, Circuitos"]
+  C -- "HTTPS + JWT" --> EF["Supabase Edge Functions"]
+  C -- "assets y catálogo" --> R2["Cloudflare R2 + CDN"]
+  CO --> PG[("Postgres: libro mayor, inventario")]
+  EF --> PG
+  EF --> GW["Gateway de IA: cuotas y moderación"]
+  GW --> LLM["Claude Haiku 5.5"]
+        </pre>
+        <p>El servidor manda en todo lo económico; el LLM solo se llama desde el gateway.</p>
+      </div>
+      <div class="diagram">
+        <h3>Visitar el Nido de un amigo</h3>
+        <pre class="mermaid">
+sequenceDiagram
+  participant J as Jugador
+  participant C as Cliente
+  participant S as Colyseus
+  participant CDN as R2 CDN
+  J->>C: Toca Visitar
+  C->>S: join nido con knownRev
+  S-->>C: NMAP de 200 a 1000 B
+  C->>C: decodificar y derivar, menos de 2 ms
+  C->>C: piso y muros al instante
+  C->>CDN: solo los muebles que faltan
+  CDN-->>C: bundles de 20 a 150 KB
+  C->>C: materializar con Virtualización
+        </pre>
+        <p>Meta: menos de 400 ms con caché, menos de 3 s en frío por 4G.</p>
+      </div>
+      <div class="diagram">
+        <h3>Ciclo de vida del Moki</h3>
+        <pre class="mermaid">
+flowchart TD
+  H["Huevo"] --> B["Bebé"]
+  B -- "nivel 6 + 24 h" --> J["Juvenil: 3 ramas"]
+  J -- "nivel 20 + 7 días" --> A["Adulto: 9 formas"]
+  A -- "nivel 40 + 30 días + vínculo 800" --> AS["Ascendido"]
+  J -. "Consolidar: Maestría" .-> J
+  A -. "Consolidar: Maestría" .-> A
+  AS -- "Renacer con herencia" --> H
+        </pre>
+        <p>Evolucionar o quedarse en la forma son igual de válidos.</p>
+      </div>
+      <div class="diagram">
+        <h3>Centro de Intercambio: canje con custodia</h3>
+        <pre class="mermaid">
+sequenceDiagram
+  participant A as Jugador A
+  participant SY as Sistema
+  participant B as Jugador B
+  A->>SY: deposita sofá
+  B->>SY: deposita lámpara + 2000 Chips
+  SY-->>A: resumen de lo que da y recibe
+  SY-->>B: resumen de lo que da y recibe
+  A->>SY: confirma tras 5 s de revisión
+  B->>SY: confirma tras 5 s de revisión
+  SY->>A: lámpara + 1900 Chips
+  SY->>B: sofá
+  Note over SY: 100 Chips de impuesto, todo en una transacción
+        </pre>
+        <p>Nunca hay "manda tú primero". Prismas nunca se transfieren.</p>
+      </div>
+      <div class="diagram">
+        <h3>Un día de juego</h3>
+        <pre class="mermaid">
+flowchart LR
+  O["Abrir: el Moki te saluda"] --> CU["Cuidar: comer, jugar, dormir"]
+  CU --> DE["Decorar el Nido"]
+  DE --> VI["Visitar amigos"]
+  VI --> ZO["Zonas: Plaza, Playa"]
+  ZO --> TR["Asignar trabajo"]
+  TR --> CI["Correr un Circuito"]
+  CI --> CH["Chips y XP"]
+  CH --> DE
+        </pre>
+        <p>Una sesión de 3 minutos vale la pena; una de 60 también.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="numeros">
+  <div class="wrap">
+    <div class="eyebrow">Números verificados por simulación</div>
+    <h2>Lo que dicen las cuentas</h2>
+    <div class="tiles">
+      <div class="tile"><div class="big">~8,600</div><div class="lbl">mensajes con el Moki por cada US$1 (Haiku 5.5, con caché)</div></div>
+      <div class="tile"><div class="big">US$145<small>/mes</small></div><div class="lbl">costo de IA con 10 mil jugadores diarios</div></div>
+      <div class="tile"><div class="big">Día 2</div><div class="lbl">primera evolución de un jugador casual</div></div>
+      <div class="tile"><div class="big">65.5%</div><div class="lbl">gana un corredor con +10% de stats: la crianza pesa, sin aplastar</div></div>
+    </div>
+    <div class="two">
+      <div class="panel chart">
+        <h3>Corrupción si no entras</h3>
+        <svg id="corr" viewBox="0 0 440 250" role="img" aria-label="Corrupción por días de ausencia: con muebles de autocuidado llega a 18 al día 3, 48 al día 7 y 92 al día 14; sin muebles llega a 36 al día 3, 73 al día 7 y 100 al día 10."></svg>
+        <p style="font-size:var(--step--1);color:var(--muted)">Con muebles de autocuidado tu Moki sigue sano tras 3 días. Nunca muere; la Cuarentena (75+) se cura con una misión.</p>
+      </div>
+      <div class="panel">
+        <h3>Calibración de la competencia</h3>
+        <div class="tablewrap" style="border:0">
+          <table>
+            <thead><tr><th>Ventaja</th><th>Circuito</th><th>Arena</th></tr></thead>
+            <tbody>
+              <tr><td>Igualados</td><td class="num">50%</td><td class="num">50.4%</td></tr>
+              <tr><td>+10% stats</td><td class="num">65.5%</td><td class="num">70.7%</td></tr>
+              <tr><td>+20% stats</td><td class="num">78.5%</td><td class="num">85.6%</td></tr>
+              <tr><td>+50% stats</td><td class="num">96.9%</td><td class="num">99.2%</td></tr>
+              <tr><td>Ventaja de afinidad</td><td class="num">—</td><td class="num">71.3%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:var(--step--1);color:var(--muted)">La afinidad vale lo mismo que +10% de stats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="eyebrow">Roadmap · una persona, sin presupuesto</div>
+    <h2>~18–22 meses hasta el lanzamiento</h2>
+    <div class="diagram">
+      <pre class="mermaid">
+gantt
+  title Plan tentativo
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
+  section Pre-producción
+  Documentación            :done, d0, 2026-11-08, 2w
+  Prototipos P1 a P6       :active, p0, after d0, 14w
+  section Producción
+  Vertical slice           :vs, after p0, 25w
+  Alfa cerrada 18+         :al, after vs, 30w
+  Soft launch CA AU NZ     :sl, after al, 14w
+  Lanzamiento global       :milestone, ln, after sl, 0d
+      </pre>
+      <p>Primer paso: <strong>P1</strong>, el formato de mundos + el constructor de salas en Unity con sprites 2D. MVP: 1 familia de Mokis (13 formas), ~60 muebles, 3 Zonas.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pendiente">
+  <div class="wrap">
+    <div class="eyebrow">Pendiente</div>
+    <h2>Lo que falta decidir o verificar</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Tema</th><th>Estado</th><th>Dónde</th></tr></thead>
+        <tbody>
+          <tr><td>Q7: qué hacer si alguien declara menos de 13 años</td><td><span class="pill warn">Con abogado</span></td><td>Preguntas abiertas</td></tr>
+          <tr><td>Búsqueda formal de marca de "Toki Moki" (USPTO, EUIPO, IMPI, JPO)</td><td><span class="pill warn">Antes de anunciar</span></td><td>ADR-0012</td></tr>
+          <tr><td>Confirmar Unity, formato de mundos, IA con Haiku, sin loot boxes, Supabase y R2</td><td><span class="pill warn">Propuestas</span></td><td>Índice de ADRs</td></tr>
+          <tr><td>Proveedor de anuncios recompensados</td><td><span class="pill">Antes del soft launch</span></td><td>Stack</td></tr>
+          <tr><td>Precios de servicios y leyes marcados [VERIFICAR]</td><td><span class="pill">Revisar con fecha</span></td><td>Legal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">Toki Moki · documentación de pre-producción v0.1 · 2026-11-08. Nombre sujeto a búsqueda de marcas.</div>
+</footer>
+
+<script>
+(function () {
+  // ---------- Nido isométrico desde el RoomDoc real ----------
+  var room = {
+    w: 6, d: 6,
+    heights: ["000000","000000","000000","000000","000011","000011"],
+    floor: ["aaaaaa","abbbba","abbbba","abbbba","aaaacc","aaaacc"],
+    door: { x: 3, y: 0 }, wallH: 3
+  };
+  // Huellas ya rotadas (r impar intercambia w y d), alturas del catálogo de ejemplo.
+  var items = [
+    { n: "Lámpara Luna", x: 0, y: 0, w: 1, d: 1, z: 0, h: 1.4, c: "#FFC23E" },
+    { n: "Comedero automático", x: 5, y: 0, w: 1, d: 1, z: 0, h: 0.5, c: "#FF8A6B" },
+    { n: "Mesa baja", x: 2, y: 2, w: 2, d: 1, z: 0, h: 0.45, c: "#D9A87A" },
+    { n: "Maceta de cactus", x: 2, y: 2, w: 1, d: 1, z: 0.45, h: 0.4, c: "#7CCB8E", small: true },
+    { n: "Pelota de datos", x: 4, y: 2, w: 1, d: 1, z: 0, h: 0.3, c: "#FF4FD8", small: true },
+    { n: "Cama Nube", x: 0, y: 4, w: 2, d: 2, z: 0, h: 0.6, c: "#BFE3FF" },
+    { n: "Caminadora", x: 4, y: 4, w: 2, d: 1, z: 0.25, h: 1.0, c: "#4F7BFF" }
+  ];
+  var wallItems = [
+    { n: "Ventana redonda", side: "L", at: 2, u: 0, len: 2, v: 1, hgt: 2, c: "#BFE3FF" },
+    { n: "Póster de estrellas", side: "R", at: 1, u: 0.25, len: 1, v: 1.25, hgt: 1, c: "#D9CCFF" }
+  ];
+  var mats = { a: "#D9A87A", b: "#9FE0CD", c: "#CFE3A6" };
+  var highlight = -1;
+  var cv = document.getElementById("nido");
+  var ctx = cv.getContext("2d");
+
+  function tok(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function shade(hex, f) {
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    r = Math.round(r * f); g = Math.round(g * f); b = Math.round(b * f);
+    return "rgb(" + Math.min(255, r) + "," + Math.min(255, g) + "," + Math.min(255, b) + ")";
+  }
+  function hAt(x, y) {
+    if (x < 0 || y < 0 || x >= room.w || y >= room.d) return null;
+    return parseInt(room.heights[y][x], 36) * 0.25;
+  }
+
+  function draw() {
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var cssW = cv.clientWidth || 560, cssH = cssW * 0.75;
+    cv.width = Math.round(cssW * dpr); cv.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    var TW = cssW / 7.2, TH = TW / 2, ZH = TH; // rombo 2:1, 1 unidad de altura = alto del rombo
+    var ox = cssW / 2, oy = TH * 3.6;
+    function P(x, y, z) { return [ox + (x - y) * TW / 2, oy + (x + y) * TH / 2 - z * ZH]; }
+    var edge = tok("--fg");
+    function poly(pts, fill, a) {
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+      ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+      ctx.globalAlpha = a == null ? 0.35 : a; ctx.strokeStyle = edge; ctx.lineWidth = 1; ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    // Losa del diorama
+    var base = -0.35;
+    poly([P(0, room.d, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(0, room.d, base)], shade("#B98A5E", 0.85), 0.5);
+    poly([P(room.w, 0, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(room.w, 0, base)], shade("#B98A5E", 0.7), 0.5);
+    // Muros traseros (L en el borde oeste, R en el borde norte), color del tinte 112
+    var wallC = "#C9C2F2";
+    for (var y = 0; y < room.d; y++) {
+      var z0 = hAt(0, y);
+      poly([P(0, y, z0), P(0, y + 1, z0), P(0, y + 1, room.wallH), P(0, y, room.wallH)], shade(wallC, 0.92), 0.25);
+    }
+    for (var x = 0; x < room.w; x++) {
+      var z1 = hAt(x, 0);
+      if (x === room.door.x) {
+        poly([P(x, 0, 2.2), P(x + 1, 0, 2.2), P(x + 1, 0, room.wallH), P(x, 0, room.wallH)], wallC, 0.25);
+        poly([P(x + 0.12, 0, z1), P(x + 0.88, 0, z1), P(x + 0.88, 0, 2.05), P(x + 0.12, 0, 2.05)], tok("--accent"), 0.6);
+        continue;
+      }
+      poly([P(x, 0, z1), P(x + 1, 0, z1), P(x + 1, 0, room.wallH), P(x, 0, room.wallH)], wallC, 0.25);
+    }
+    // Objetos de pared
+    wallItems.forEach(function (it) {
+      var a = it.at + it.u, b = a + it.len, lo = it.v, hi = it.v + it.hgt;
+      var pts = it.side === "L" ? [P(0, a, lo), P(0, b, lo), P(0, b, hi), P(0, a, hi)] : [P(a, 0, lo), P(b, 0, lo), P(b, 0, hi), P(a, 0, hi)];
+      poly(pts, it.c, 0.7);
+    });
+    // Piso por celdas, de atrás hacia adelante
+    var cells = [];
+    for (var cy = 0; cy < room.d; cy++) for (var cx = 0; cx < room.w; cx++) cells.push([cx, cy]);
+    cells.sort(function (p, q) { return (p[0] + p[1]) - (q[0] + q[1]); });
+    cells.forEach(function (c) {
+      var x = c[0], y = c[1], h = hAt(x, y), col = mats[room.floor[y][x]];
+      var hx = hAt(x + 1, y), hy = hAt(x, y + 1);
+      if (hx !== null && hx < h) poly([P(x + 1, y, h), P(x + 1, y + 1, h), P(x + 1, y + 1, hx), P(x + 1, y, hx)], shade(col, 0.72), 0.4);
+      if (hy !== null && hy < h) poly([P(x, y + 1, h), P(x + 1, y + 1, h), P(x + 1, y + 1, hy), P(x, y + 1, hy)], shade(col, 0.84), 0.4);
+      poly([P(x, y, h), P(x + 1, y, h), P(x + 1, y + 1, h), P(x, y + 1, h)], col, 0.18);
+    });
+    // Muebles como cajas, ordenados por profundidad
+    var order = items.map(function (it, i) { return i; });
+    order.sort(function (i, j) {
+      var a = items[i], b = items[j];
+      var ka = a.x + a.w + a.y + a.d, kb = b.x + b.w + b.y + b.d;
+      return ka - kb || a.z - b.z;
+    });
+    order.forEach(function (i) {
+      var it = items[i], x = it.x, y = it.y, w = it.w, d = it.d, z = it.z, top = z + it.h;
+      var ins = it.small ? 0.22 : 0.06;
+      var x0 = x + ins, y0 = y + ins, x1 = x + w - ins, y1 = y + d - ins;
+      var col = it.c;
+      ctx.globalAlpha = 0.18; poly([P(x0, y0, z), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z)], "#000", 0); ctx.globalAlpha = 1;
+      poly([P(x0, y1, z), P(x1, y1, z), P(x1, y1, top), P(x0, y1, top)], shade(col, 0.82), 0.45);
+      poly([P(x1, y0, z), P(x1, y1, z), P(x1, y1, top), P(x1, y0, top)], shade(col, 0.68), 0.45);
+      poly([P(x0, y0, top), P(x1, y0, top), P(x1, y1, top), P(x0, y1, top)], col, 0.45);
+      if (i === highlight) {
+        ctx.save(); ctx.strokeStyle = tok("--pop"); ctx.lineWidth = 3;
+        var pts = [P(x0, y0, top), P(x1, y0, top), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z), P(x0, y1, top)];
+        ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]); ctx.closePath(); ctx.stroke(); ctx.restore();
+      }
+    });
+  }
+
+  var legend = document.getElementById("legend");
+  items.forEach(function (it, i) {
+    var li = document.createElement("li"), b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<i style="background:' + it.c + '"></i>' + it.n;
+    b.addEventListener("click", function () {
+      highlight = highlight === i ? -1 : i;
+      legend.querySelectorAll("button").forEach(function (x, k) { x.setAttribute("aria-pressed", k === highlight ? "true" : "false"); });
+      draw();
+    });
+    li.appendChild(b); legend.appendChild(li);
+  });
+
+  // ---------- Volcado NMAP ----------
+  var hex = "4e4d4150010306062a010a04650066256700c90170020901001c010200040102031501000701040002010400020104000502020004020204050c03030000050c09ce0830366a5c6364f4036d0628070102000400010305000803010002020101050202042d01040402000106040401010100001801c9070f0201070002000020010801000108280907b9179d188119000a120f456c206e69646f20646520506978690a01ffdfc48b5c";
+  var bytes = []; for (var p = 0; p < hex.length; p += 2) bytes.push(hex.substr(p, 2));
+  var secs = [["Cabecera", 9], ["PALETTE", 12], ["HEIGHTS", 11], ["FLOOR", 23], ["ESTRUCTURA", 7], ["ITEM_TYPES", 14], ["ITEMS", 42], ["WALL_ITEMS", 17], ["ENV", 9], ["META", 20], ["END + CRC", 5]];
+  var secOf = [], pos = 0;
+  secs.forEach(function (s, i) { for (var k = 0; k < s[1]; k++) secOf[pos++] = i; });
+  var hexEl = document.getElementById("hex"), html = "";
+  for (var r = 0; r < bytes.length; r += 16) {
+    html += '<span class="row"><span class="off">' + ("000" + r.toString(16)).slice(-4) + "</span>";
+    for (var c2 = r; c2 < Math.min(r + 16, bytes.length); c2++) html += '<b data-s="' + secOf[c2] + '">' + bytes[c2] + "</b> ";
+    html += "</span>";
+  }
+  hexEl.innerHTML = html;
+  var secsEl = document.getElementById("secs"), active = -1;
+  secs.forEach(function (s, i) {
+    var li = document.createElement("li"), b = document.createElement("button");
+    b.type = "button"; b.textContent = s[0] + " · " + s[1] + " B"; b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () {
+      active = active === i ? -1 : i;
+      secsEl.querySelectorAll("button").forEach(function (x, k) { x.setAttribute("aria-pressed", k === active ? "true" : "false"); });
+      hexEl.querySelectorAll("b").forEach(function (el) { el.classList.toggle("hl", +el.getAttribute("data-s") === active); });
+    });
+    li.appendChild(b); secsEl.appendChild(li);
+  });
+
+  // ---------- Barras de tamaño ----------
+  var rooms = [["Nido 6×6", 1704, 682, 224], ["Nido 8×8", 3066, 984, 364], ["Nido 12×12 en L", 6336, 1659, 732], ["Nido 12×12 lleno", 8577, 2056, 964], ["Plaza 32×32", 25587, 5092, 3173], ["Zona 64×64", 83718, 14318, 9818]];
+  function fmt(n) { return n.toLocaleString("es-MX") + " B"; }
+  var barsEl = document.getElementById("bars");
+  rooms.forEach(function (rm) {
+    var j = rm[1];
+    var row = document.createElement("div"); row.className = "bar-row";
+    row.innerHTML = '<div class="name">' + rm[0] + '<small>NMAP = ' + Math.round(rm[3] / j * 100) + '% del JSON</small></div>' +
+      '<div class="stack"><div class="bar json" style="width:100%"></div>' +
+      '<div class="bar gz" style="width:' + (rm[2] / j * 100).toFixed(1) + '%"></div>' +
+      '<div class="bar nmap" style="width:' + (rm[3] / j * 100).toFixed(1) + '%"></div>' +
+      '<div class="vals">' + fmt(rm[1]) + ' · ' + fmt(rm[2]) + ' · <strong>' + fmt(rm[3]) + '</strong></div></div>';
+    barsEl.appendChild(row);
+  });
+
+  // ---------- Curva de Corrupción ----------
+  var svg = document.getElementById("corr"), NS = "http://www.w3.org/2000/svg";
+  var L = 44, R = 420, T = 14, B = 214;
+  function X(d) { return L + d / 14 * (R - L); }
+  function Y(v) { return B - v / 100 * (B - T); }
+  function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; }
+  function drawChart() {
+    svg.innerHTML = "";
+    var line = tok("--line"), muted = tok("--muted");
+    [["Leve", 25], ["Moderado", 50], ["Cuarentena", 75]].forEach(function (b) {
+      el("line", { x1: L, x2: R, y1: Y(b[1]), y2: Y(b[1]), stroke: line, "stroke-dasharray": "3 4" });
+      el("text", { x: R, y: Y(b[1]) - 4, "text-anchor": "end" }).textContent = b[0] + " " + b[1];
+    });
+    [0, 25, 50, 75, 100].forEach(function (v) { el("text", { x: L - 8, y: Y(v) + 4, "text-anchor": "end" }).textContent = v; });
+    [0, 3, 7, 10, 14].forEach(function (d) { el("text", { x: X(d), y: B + 18, "text-anchor": "middle" }).textContent = "día " + d; });
+    el("line", { x1: L, x2: R, y1: B, y2: B, stroke: muted });
+    var series = [
+      { pts: [[0, 0], [3, 18], [4, 26], [7, 48], [10, 68], [14, 92]], c: tok("--accent"), lbl: "con muebles" },
+      { pts: [[0, 0], [3, 36], [5, 54], [7, 73], [10, 100]], c: tok("--pop"), lbl: "sin muebles" }
+    ];
+    series.forEach(function (s) {
+      el("polyline", { points: s.pts.map(function (p) { return X(p[0]) + "," + Y(p[1]); }).join(" "), fill: "none", stroke: s.c, "stroke-width": 2.5, "stroke-linejoin": "round" });
+      s.pts.forEach(function (p, i) { if (i) el("circle", { cx: X(p[0]), cy: Y(p[1]), r: 3.5, fill: s.c }); });
+      var last = s.pts[s.pts.length - 1];
+      var t = el("text", { x: X(last[0]) - 6, y: Y(last[1]) + (s.lbl === "sin muebles" ? 16 : -10), "text-anchor": "end" });
+      t.textContent = s.lbl; t.style.fill = s.c;
+    });
+  }
+
+  // ---------- Redibujar con tema y tamaño ----------
+  function redraw() { draw(); drawChart(); }
+  redraw();
+  window.addEventListener("resize", draw);
+  try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw); } catch (e) {}
+  new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawChart);
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+  var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "default", securityLevel: "strict" });
+</script>
+</body>
+</html>
