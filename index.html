@@ -194,8 +194,8 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: var(--step--1
       </div>
     </div>
     <figure class="diorama" style="margin:0">
-      <canvas id="nido" width="560" height="420" role="img" aria-label="El Nido de ejemplo de 6 por 6 celdas dibujado en isométrico a partir de su RoomDoc: piso de madera, alfombra y tatami, una plataforma elevada, muros en los bordes traseros, una puerta, una ventana, un póster y siete muebles."></canvas>
-      <figcaption class="cap">El Nido de ejemplo dibujado en vivo desde su RoomDoc real: 36 celdas, 7 muebles y 2 objetos de pared. Toca un mueble de la lista para resaltarlo.</figcaption>
+      <canvas id="nido" width="560" height="358" role="img" aria-label="El Nido de ejemplo en isométrico: a la izquierda el cuarto de 6 por 6 celdas con piso de madera, alfombra y tatami, una plataforma, muros traseros, una ventana, un póster y siete muebles; a la derecha un patio de pasto del mismo tamaño con cerca, reja de entrada, una piscina inflable, un árbol y una jardinera, separado del cuarto por un muro bajo con puerta."></canvas>
+      <figcaption class="cap">El Nido de ejemplo dibujado en vivo desde su RoomDoc real, ahora con su patio: un cuarto de 36 celdas con 7 muebles y 2 objetos de pared, y al lado un patio de 36 celdas con pasto (sus muebles son de muestra). Toca un mueble de la lista para resaltarlo.</figcaption>
       <ul class="legend" id="legend"></ul>
     </figure>
   </div>
@@ -462,12 +462,13 @@ gantt
 
 <script>
 (function () {
-  // ---------- Nido isométrico desde el RoomDoc real ----------
+  // ---------- Nido isométrico: cuarto del RoomDoc real + patio (ADR-0018) ----------
+  // Rejilla combinada 12×6: columnas 0–5 = cuarto (RoomDoc de ejemplo), 6–11 = patio de muestra.
   var room = {
-    w: 6, d: 6,
-    heights: ["000000","000000","000000","000000","000011","000011"],
-    floor: ["aaaaaa","abbbba","abbbba","abbbba","aaaacc","aaaacc"],
-    door: { x: 3, y: 0 }, wallH: 3
+    w: 12, d: 6, roomW: 6,
+    heights: ["000000000000","000000000000","000000000000","000000000000","000011000000","000011000000"],
+    floor: ["aaaaaagggggg","abbbbagggggg","abbbbagggggg","abbbbagggggg","aaaaccgggggg","aaaaccgggggg"],
+    wallH: 3, cutH: 0.75, fenceH: 0.8, gateX: 9, innerDoorY: 1
   };
   // Huellas ya rotadas (r impar intercambia w y d), alturas del catálogo de ejemplo.
   var items = [
@@ -477,13 +478,16 @@ gantt
     { n: "Maceta de cactus", x: 2, y: 2, w: 1, d: 1, z: 0.45, h: 0.4, c: "#7CCB8E", small: true },
     { n: "Pelota de datos", x: 4, y: 2, w: 1, d: 1, z: 0, h: 0.3, c: "#FF4FD8", small: true },
     { n: "Cama Nube", x: 0, y: 4, w: 2, d: 2, z: 0, h: 0.6, c: "#BFE3FF" },
-    { n: "Caminadora", x: 4, y: 4, w: 2, d: 1, z: 0.25, h: 1.0, c: "#4F7BFF" }
+    { n: "Caminadora", x: 4, y: 4, w: 2, d: 1, z: 0.25, h: 1.0, c: "#4F7BFF" },
+    { n: "Piscina inflable (patio)", x: 7, y: 3, w: 2, d: 2, z: 0, h: 0.3, c: "#3EC6F0", patio: true },
+    { n: "Árbol de datos (patio)", x: 10, y: 1, w: 1, d: 1, z: 0, h: 2.0, c: "#3FA66B", patio: true },
+    { n: "Jardinera (patio)", x: 11, y: 4, w: 1, d: 2, z: 0, h: 0.4, c: "#C98A5B", patio: true }
   ];
   var wallItems = [
     { n: "Ventana redonda", side: "L", at: 2, u: 0, len: 2, v: 1, hgt: 2, c: "#BFE3FF" },
     { n: "Póster de estrellas", side: "R", at: 1, u: 0.25, len: 1, v: 1.25, hgt: 1, c: "#D9CCFF" }
   ];
-  var mats = { a: "#D9A87A", b: "#9FE0CD", c: "#CFE3A6" };
+  var mats = { a: "#D9A87A", b: "#9FE0CD", c: "#CFE3A6", g: "#8CCB72" };
   var highlight = -1;
   var cv = document.getElementById("nido");
   var ctx = cv.getContext("2d");
@@ -501,12 +505,12 @@ gantt
 
   function draw() {
     var dpr = Math.max(1, window.devicePixelRatio || 1);
-    var cssW = cv.clientWidth || 560, cssH = cssW * 0.75;
+    var cssW = cv.clientWidth || 560, cssH = cssW * 0.64;
     cv.width = Math.round(cssW * dpr); cv.height = Math.round(cssH * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, cssW, cssH);
-    var TW = cssW / 7.2, TH = TW / 2, ZH = TH; // rombo 2:1, 1 unidad de altura = alto del rombo
-    var ox = cssW / 2, oy = TH * 3.6;
+    var TW = cssW / 10.4, TH = TW / 2, ZH = TH; // rombo 2:1, 1 unidad de altura = alto del rombo
+    var ox = TW * 3.5, oy = TH * 3.6;
     function P(x, y, z) { return [ox + (x - y) * TW / 2, oy + (x + y) * TH / 2 - z * ZH]; }
     var edge = tok("--fg");
     function poly(pts, fill, a) {
@@ -515,24 +519,52 @@ gantt
       ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
       ctx.globalAlpha = a == null ? 0.35 : a; ctx.strokeStyle = edge; ctx.lineWidth = 1; ctx.stroke(); ctx.globalAlpha = 1;
     }
-    // Losa del diorama
-    var base = -0.35;
-    poly([P(0, room.d, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(0, room.d, base)], shade("#B98A5E", 0.85), 0.5);
-    poly([P(room.w, 0, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(room.w, 0, base)], shade("#B98A5E", 0.7), 0.5);
-    // Muros traseros (L en el borde oeste, R en el borde norte), color del tinte 112
+    function box(it) {
+      var x = it.x, y = it.y, w = it.w, d = it.d, z = it.z, top = z + it.h;
+      var ins = it.small ? 0.22 : 0.06;
+      var x0 = x + ins, y0 = y + ins, x1 = x + w - ins, y1 = y + d - ins, col = it.c;
+      ctx.globalAlpha = 0.18; poly([P(x0, y0, z), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z)], "#000", 0); ctx.globalAlpha = 1;
+      poly([P(x0, y1, z), P(x1, y1, z), P(x1, y1, top), P(x0, y1, top)], shade(col, 0.82), 0.45);
+      poly([P(x1, y0, z), P(x1, y1, z), P(x1, y1, top), P(x1, y0, top)], shade(col, 0.68), 0.45);
+      poly([P(x0, y0, top), P(x1, y0, top), P(x1, y1, top), P(x0, y1, top)], col, 0.45);
+      if (items.indexOf(it) === highlight) {
+        ctx.save(); ctx.strokeStyle = tok("--pop"); ctx.lineWidth = 3;
+        var pts = [P(x0, y0, top), P(x1, y0, top), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z), P(x0, y1, top)];
+        ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]); ctx.closePath(); ctx.stroke(); ctx.restore();
+      }
+    }
+    function sortItems(list) {
+      return list.slice().sort(function (a, b) {
+        var ka = a.x + a.w + a.y + a.d, kb = b.x + b.w + b.y + b.d;
+        return ka - kb || a.z - b.z;
+      });
+    }
+    // Losa del diorama (madera bajo el cuarto, tierra bajo el patio)
+    var base = -0.35, RW = room.roomW;
+    poly([P(0, room.d, 0), P(RW, room.d, 0), P(RW, room.d, base), P(0, room.d, base)], shade("#B98A5E", 0.85), 0.5);
+    poly([P(RW, room.d, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(RW, room.d, base)], shade("#8A6A45", 0.85), 0.5);
+    poly([P(room.w, 0, 0), P(room.w, room.d, 0), P(room.w, room.d, base), P(room.w, 0, base)], shade("#8A6A45", 0.7), 0.5);
+    // Muros traseros del cuarto (L oeste, R norte); la entrada ahora es la reja del patio
     var wallC = "#C9C2F2";
     for (var y = 0; y < room.d; y++) {
       var z0 = hAt(0, y);
       poly([P(0, y, z0), P(0, y + 1, z0), P(0, y + 1, room.wallH), P(0, y, room.wallH)], shade(wallC, 0.92), 0.25);
     }
-    for (var x = 0; x < room.w; x++) {
+    for (var x = 0; x < RW; x++) {
       var z1 = hAt(x, 0);
-      if (x === room.door.x) {
-        poly([P(x, 0, 2.2), P(x + 1, 0, 2.2), P(x + 1, 0, room.wallH), P(x, 0, room.wallH)], wallC, 0.25);
-        poly([P(x + 0.12, 0, z1), P(x + 0.88, 0, z1), P(x + 0.88, 0, 2.05), P(x + 0.12, 0, 2.05)], tok("--accent"), 0.6);
+      poly([P(x, 0, z1), P(x + 1, 0, z1), P(x + 1, 0, room.wallH), P(x, 0, room.wallH)], wallC, 0.25);
+    }
+    // Cerca trasera del patio con la reja de entrada
+    for (var fx = RW; fx < room.w; fx++) {
+      if (fx === room.gateX) {
+        poly([P(fx + 0.08, 0, 0), P(fx + 0.92, 0, 0), P(fx + 0.92, 0, room.fenceH + 0.15), P(fx + 0.08, 0, room.fenceH + 0.15)], tok("--accent"), 0.55);
         continue;
       }
-      poly([P(x, 0, z1), P(x + 1, 0, z1), P(x + 1, 0, room.wallH), P(x, 0, room.wallH)], wallC, 0.25);
+      poly([P(fx, 0, 0), P(fx + 1, 0, 0), P(fx + 1, 0, room.fenceH), P(fx, 0, room.fenceH)], "#E8D2A6", 0.4);
+      for (var s = 0.25; s < 1; s += 0.25) {
+        var a = P(fx + s, 0, 0), b = P(fx + s, 0, room.fenceH);
+        ctx.globalAlpha = 0.3; ctx.strokeStyle = edge; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.globalAlpha = 1;
+      }
     }
     // Objetos de pared
     wallItems.forEach(function (it) {
@@ -540,39 +572,29 @@ gantt
       var pts = it.side === "L" ? [P(0, a, lo), P(0, b, lo), P(0, b, hi), P(0, a, hi)] : [P(a, 0, lo), P(b, 0, lo), P(b, 0, hi), P(a, 0, hi)];
       poly(pts, it.c, 0.7);
     });
-    // Piso por celdas, de atrás hacia adelante
+    // Piso por celdas, de atrás hacia adelante (el pasto alterna dos tonos)
     var cells = [];
     for (var cy = 0; cy < room.d; cy++) for (var cx = 0; cx < room.w; cx++) cells.push([cx, cy]);
     cells.sort(function (p, q) { return (p[0] + p[1]) - (q[0] + q[1]); });
     cells.forEach(function (c) {
-      var x = c[0], y = c[1], h = hAt(x, y), col = mats[room.floor[y][x]];
+      var x = c[0], y = c[1], h = hAt(x, y), key = room.floor[y][x], col = mats[key];
+      if (key === "g" && (x + y) % 2) col = "#97D47D";
       var hx = hAt(x + 1, y), hy = hAt(x, y + 1);
       if (hx !== null && hx < h) poly([P(x + 1, y, h), P(x + 1, y + 1, h), P(x + 1, y + 1, hx), P(x + 1, y, hx)], shade(col, 0.72), 0.4);
       if (hy !== null && hy < h) poly([P(x, y + 1, h), P(x + 1, y + 1, h), P(x + 1, y + 1, hy), P(x, y + 1, hy)], shade(col, 0.84), 0.4);
       poly([P(x, y, h), P(x + 1, y, h), P(x + 1, y + 1, h), P(x, y + 1, h)], col, 0.18);
     });
-    // Muebles como cajas, ordenados por profundidad
-    var order = items.map(function (it, i) { return i; });
-    order.sort(function (i, j) {
-      var a = items[i], b = items[j];
-      var ka = a.x + a.w + a.y + a.d, kb = b.x + b.w + b.y + b.d;
-      return ka - kb || a.z - b.z;
-    });
-    order.forEach(function (i) {
-      var it = items[i], x = it.x, y = it.y, w = it.w, d = it.d, z = it.z, top = z + it.h;
-      var ins = it.small ? 0.22 : 0.06;
-      var x0 = x + ins, y0 = y + ins, x1 = x + w - ins, y1 = y + d - ins;
-      var col = it.c;
-      ctx.globalAlpha = 0.18; poly([P(x0, y0, z), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z)], "#000", 0); ctx.globalAlpha = 1;
-      poly([P(x0, y1, z), P(x1, y1, z), P(x1, y1, top), P(x0, y1, top)], shade(col, 0.82), 0.45);
-      poly([P(x1, y0, z), P(x1, y1, z), P(x1, y1, top), P(x1, y0, top)], shade(col, 0.68), 0.45);
-      poly([P(x0, y0, top), P(x1, y0, top), P(x1, y1, top), P(x0, y1, top)], col, 0.45);
-      if (i === highlight) {
-        ctx.save(); ctx.strokeStyle = tok("--pop"); ctx.lineWidth = 3;
-        var pts = [P(x0, y0, top), P(x1, y0, top), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z), P(x0, y1, top)];
-        ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]); ctx.closePath(); ctx.stroke(); ctx.restore();
+    // Muebles del cuarto, luego el muro bajo de corte con su puerta, luego el patio
+    sortItems(items.filter(function (it) { return !it.patio; })).forEach(box);
+    for (var wy = 0; wy < room.d; wy++) {
+      if (wy === room.innerDoorY) {
+        poly([P(RW, wy, 0), P(RW, wy + 0.12, 0), P(RW, wy + 0.12, room.cutH + 0.35), P(RW, wy, room.cutH + 0.35)], tok("--accent"), 0.6);
+        poly([P(RW, wy + 0.88, 0), P(RW, wy + 1, 0), P(RW, wy + 1, room.cutH + 0.35), P(RW, wy + 0.88, room.cutH + 0.35)], tok("--accent"), 0.6);
+        continue;
       }
-    });
+      poly([P(RW, wy, 0), P(RW, wy + 1, 0), P(RW, wy + 1, room.cutH), P(RW, wy, room.cutH)], shade(wallC, 0.85), 0.4);
+    }
+    sortItems(items.filter(function (it) { return it.patio; })).forEach(box);
   }
 
   var legend = document.getElementById("legend");
