@@ -333,23 +333,24 @@ flowchart TD
         <p>Evolucionar o quedarse en la forma son igual de válidos.</p>
       </div>
       <div class="diagram">
-        <h3>Centro de Intercambio: canje con custodia</h3>
+        <h3>Centro de Intercambio: ventana con aceptación de ambos</h3>
         <pre class="mermaid">
 sequenceDiagram
   participant A as Jugador A
-  participant SY as Sistema
+  participant SY as Servidor
   participant B as Jugador B
-  A->>SY: deposita sofá
-  B->>SY: deposita lámpara + 2000 Chips
-  SY-->>A: resumen de lo que da y recibe
-  SY-->>B: resumen de lo que da y recibe
-  A->>SY: confirma tras 5 s de revisión
-  B->>SY: confirma tras 5 s de revisión
+  A->>SY: pone un sofá en su zona
+  Note over SY: enfriamiento de 4 s, botones en gris
+  A->>SY: Aceptar versión 1
+  B->>SY: pone lámpara + 2000 Chips
+  Note over SY: enfriamiento de 4 s, la aceptación de A se reinicia
+  B->>SY: Aceptar versión 2
+  A->>SY: Aceptar versión 2
   SY->>A: lámpara + 1900 Chips
   SY->>B: sofá
   Note over SY: 100 Chips de impuesto, todo en una transacción
         </pre>
-        <p>Nunca hay "manda tú primero". Prismas nunca se transfieren.</p>
+        <p>Cada cambio inicia un enfriamiento de 3 a 5 s validado en el servidor y reinicia la aceptación del otro. Un lado vacío es un regalo. Los Prismas nunca se transfieren.</p>
       </div>
       <div class="diagram">
         <h3>Un día de juego</h3>
