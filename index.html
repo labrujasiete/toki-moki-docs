@@ -77,6 +77,8 @@ section > .wrap { display: grid; gap: 24px; }
 .hero h1 { font-size: var(--step-4); font-weight: 900; margin-top: 8px; }
 .hero .meaning { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); margin-top: 6px; }
 .hero .pitch { font-size: var(--step-1); margin-top: 18px; }
+.blueprint-tag { margin-bottom: 10px; color: var(--accent); }
+.hero .blueprint { margin-top: 12px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 12px; }
 .status { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: var(--step--1); font-weight: 500; background: var(--sunk); color: var(--fg); white-space: nowrap; }
 .pill.ok { background: var(--ok-soft); color: var(--ok); }
@@ -178,10 +180,12 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: var(--step--1
 <header class="hero" id="inicio">
   <div class="wrap">
     <div>
+      <div class="eyebrow blueprint-tag">Planos del juego · pre-producción</div>
       <div class="kanji" aria-hidden="true"><span class="toki">時</span><span class="moki">モキ</span></div>
       <h1><span class="toki">Toki</span> <span class="moki">Moki</span></h1>
       <div class="meaning"><span class="toki">toki</span> = tiempo, momento · <span class="moki">moki</span> = las criaturas de la Red</div>
       <p class="pitch">Cría a un Moki con IA que te recuerda, decora tu Nido isométrico y llévalo a un mundo social vivo.</p>
+      <p class="blueprint">Esto es básicamente el plano del juego: las decisiones, el diseño y la técnica con los que se va a construir Toki Moki. Todavía no hay un juego jugable.</p>
       <div class="status">
         <span class="pill">Pre-producción · 0 líneas de código del juego</span>
         <span class="pill ok">11 decisiones aceptadas</span>
